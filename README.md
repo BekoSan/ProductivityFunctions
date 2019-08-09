@@ -1,6 +1,6 @@
 # ProductivityFunctions
 
-This is an extension  functions library for  PictureBox , DataGridView ,Form and Exceiption Class 
+This is an extension  functions library for  PictureBox , DataGridView ,Form and Byte Array and Exceiption Class 
 
 # Release Notes
 v1.0.0
