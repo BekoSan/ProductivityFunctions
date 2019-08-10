@@ -41,6 +41,27 @@ namespace ProductivityFunctionsLibrary
 
         }
 
+        /*String Object Functions
+         - GetFileIcon(fileName); returns Image.
+         - GetFileIcon(fileName); returns Icon.
+         - GetFileIcon(fileName); returns byte array.
+         */
+
+        ///// <summary>
+        ///// Gets the icon of the file.
+        ///// Important Note : make sure that your string is a file path.
+        ///// </summary>
+        ///// <param name="fileName">Full path of the file.</param>
+        ///// <returns></returns>
+        //public static Bitmap GetFileIcon(this string fileName)
+        //{
+
+        //    if (fileName.Contains(@"\") != true) return null;
+        //    Bitmap bitmap = Icon.ExtractAssociatedIcon(fileName).ToBitmap();
+        //    return bitmap;
+
+        //}
+
     }
 
 }

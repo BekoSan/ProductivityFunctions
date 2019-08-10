@@ -40,6 +40,135 @@ namespace ProductivityFunctionsLibrary
             }
         }
 
+        private static List<string> LoadAllFolders_(string parentDirectory)
+        {
+
+            List<string> output = new List<string>();
+
+            if (Directory.Exists(parentDirectory))
+            {
+                var foldersList = Directory.GetDirectories(parentDirectory);
+                if (foldersList.Length != 0)
+                {
+                    foreach (string directory in foldersList)
+                    {
+                        output.Add(directory);
+                    }
+                }
+            }
+
+            return output;
+
+        }
+
+        private static async Task<List<string>> LoadAllFolders(string parentDirectory)
+        {
+
+            List<string> output = await Task.Run(() => LoadAllFolders_(parentDirectory));
+            return output;
+
+        }
+
+        private static List<string> LoadAllFiles_(string parentDirectory)
+        {
+
+            List<string> output = new List<string>();
+
+            var filesList = Directory.GetFiles(parentDirectory);
+
+            if (filesList.Length != 0)
+            {
+                foreach (string file in filesList)
+                {
+                    output.Add(file);
+                }
+            }
+
+            return output;
+
+        }
+
+        private static async Task<List<string>> LoadAllFiles(string parentDirectory)
+        {
+
+            List<string> output = await Task.Run(() => LoadAllFiles_(parentDirectory));
+            return output;
+
+        }
+
+        private static void FillIconsList(this List<string> files,List<Icon> iconsList)
+        {
+            Icon tempIcon;
+
+            foreach (string file in files)
+            {
+                tempIcon = Icon.ExtractAssociatedIcon(file);
+                iconsList.Add(tempIcon);
+            }
+
+        }
+
+        private static async void FillIconsListAysnc(this List<string> files, List<Icon> iconsList)
+        {
+            Icon tempIcon;
+
+            await Task.Run(() => {
+                foreach (string file in files)
+                {
+                    tempIcon = Icon.ExtractAssociatedIcon(file);
+                    iconsList.Add(tempIcon);
+                }
+            });
+
+        }
+
+        private static List<Icon> LoadAllFileIcons(string parentDirectory)
+        {
+
+            List<Icon> output = new List<Icon>();
+            List<string> allFiles = LoadAllFiles_(parentDirectory);
+            if (allFiles.Count > 0)
+            {
+                allFiles.FillIconsList(output);
+            }
+
+            return output;
+
+        }
+
+        private static async  Task<List<Icon>> LoadAllFileIconsAysnc(string parentDirectory)
+        {
+
+            List<Icon> output = new List<Icon>();
+            List<string> allFiles = await LoadAllFiles(parentDirectory);
+            if (allFiles.Count > 0)
+            {
+                await Task.Run(() => allFiles.FillIconsList(output));
+            }
+
+            return output;
+
+        }
+
+        //private static List<Icon> LoadAllFoldersIcons(string parentDirectory)
+        //{
+
+        //    List<Icon> output = new List<Icon>();
+        //    List<string> allFolders = Directory.GetFiles(parentDirectory).ToList();
+        //    Icon tempIcon;
+        //    if (allFolders.Count > 0)
+        //    {
+        //        foreach (string file in allFolders)
+        //        {
+        //            tempIcon = Icon.ExtractAssociatedIcon(file);
+        //            output.Add(tempIcon);
+        //        }
+        //    }
+
+        //    return output;
+
+        //}
+
         #endregion
 
         #region PictureBox Methods
@@ -120,6 +249,11 @@ namespace ProductivityFunctionsLibrary
             }
 
         }
+
+        /*TODO- PictureBox Functions
+         - GenerateQRCode(text);
+         - GenerateBarcode(text);
+        */
 
         #endregion
 
@@ -352,6 +486,26 @@ namespace ProductivityFunctionsLibrary
 
         #endregion
 
+        #region DataGridViewComboBoxCell Methods
+
+        /// <summary>
+        /// Updates the combo box data source with value and display members.
+        /// Important Note : Use this method in RowsAdded Event of the DataGridView.
+        /// </summary>
+        /// <param name="comboBox">The combo box.</param>
+        /// <param name="dataSource">The Data source.</param>
+        /// <param name="displayMember">The display member.</param>
+        /// <param name="valueMember">The value memeber.</param>
+        public static void UpdateDataSource(this DataGridViewComboBoxCell comboBox, object dataSource, string displayMember, string valueMember)
+        {
+            comboBox.DataSource = null;
+            comboBox.DataSource = dataSource;
+            comboBox.DisplayMember = displayMember;
+            comboBox.ValueMember = valueMember;
+        }
+
+        #endregion
+
         #region ComboBox Methods
 
         /// <summary>
@@ -372,7 +526,6 @@ namespace ProductivityFunctionsLibrary
         }
 
         #endregion
-
 
         #region Form Methods
 
@@ -423,6 +576,184 @@ namespace ProductivityFunctionsLibrary
         }
 
         #endregion
+
+        #region ImageList Methods
+
+        /// <summary>
+        /// Fills the ImageList.Images Property.
+        /// </summary>
+        /// <param name="imageList">The image list control to fill.</param>
+        /// <param name="icons">The list of icons to be inserted in the list.</param>
+        public static void FillImageList(this ImageList imageList, List<Icon> icons)
+        {
+
+            foreach (Icon icon in icons)
+            {
+                imageList.Images.Add(icon);
+            }
+
+        } 
+
+        #endregion
+
+        /*TODO- ListView Functions 
+      - LoadFoldersListWithIcons(folderName);
+      - LoadFoldersListWithIconsAsync(folderName);
+      - LoadFilesListWithIconsAysnc(folderName);
+      - LoadFilesAndFolders(folderName);
+      - LoadFilesAndFoldersAysnc(folderName);
+      - LoadFilesAndFoldersWithIcons(folderName);
+      - LoadFilesAndFoldersWithIconsAysnc(folderName);
+      - LoadList(list<T>);
+      - LoadList(list<T>,ImageList images);
+      */
+
+        /// <summary>
+        /// Loads all the folders inside parent directory.
+        /// </summary>
+        /// <param name="listView">The list view to load folders on.</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static void LoadFoldersList(this ListView listView, string parentDirectory)
+        {
+
+            List<string> ItemsList = LoadAllFolders_(parentDirectory);
+
+            if (ItemsList.Count > 0)
+            {
+                listView.Items.Clear();
+                foreach (string item in ItemsList)
+                {
+                    listView.Items.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Loads all the folders inside parent directory aysnc.
+        /// </summary>
+        /// <param name="listView">The list view to load folders on.</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static async void LoadFoldersListAysnc(this ListView listView, string parentDirectory)
+        {
+
+            List<string> listViewItems = await LoadAllFolders(parentDirectory);
+
+            if (listViewItems.Count > 0)
+            {
+                listView.Items.Clear();
+                foreach (string item in listViewItems)
+                {
+                    listView.Items.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Load all files inside of parent Directory.
+        /// </summary>
+        /// <param name="listView">The list view to load files on</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static void LoadFilesList(this ListView listView, string parentDirectory)
+        {
+
+            List<string> ItemsList = LoadAllFiles_(parentDirectory);
+
+            if (ItemsList.Count > 0)
+            {
+                listView.Items.Clear();
+                foreach (string item in ItemsList)
+                {
+                    listView.Items.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Load all files inside of parent Directory aysnc.
+        /// </summary>
+        /// <param name="listView">The list view to load files on</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static async void LoadFilesListAysnc(this ListView listView, string parentDirectory)
+        {
+
+            List<string> ItemsList = await  LoadAllFiles(parentDirectory);
+
+            if (ItemsList.Count > 0)
+            {
+                listView.Items.Clear();
+                foreach (string item in ItemsList)
+                {
+                    listView.Items.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Load all files inside of parent Directory.
+        /// </summary>
+        /// <param name="listView">The list view to load files on</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static void LoadFilesWithIcons(this ListView listView, string parentDirectory)
+        {
+
+            List<string> ItemsList = LoadAllFiles_(parentDirectory);
+            ImageList imageList = new ImageList();
+            imageList.FillImageList(LoadAllFileIcons(parentDirectory));
+
+            if (ItemsList.Count > 0)
+            {
+                listView.Items.Clear();
+                //int lastIndex = listView.Items.Count - 1;
+                listView.LargeImageList = imageList;
+                listView.SmallImageList = imageList;
+                foreach (string item in ItemsList)
+                {
+                    listView.Items.Add(item);
+                    listView.Items[listView.Items.Count - 1].ImageIndex = (listView.Items.Count - 1);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Load all files inside of parent directoryaysnc.
+        /// </summary>
+        /// <param name="listView">The list view to load files on</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static async void LoadFilesWithIconsAysnc(this ListView listView, string parentDirectory)
+        {
+
+            List<string> ItemsList = await  LoadAllFiles(parentDirectory);
+            ImageList imageList = new ImageList();
+            imageList.FillImageList(await LoadAllFileIconsAysnc(parentDirectory));
+
+            if (ItemsList.Count > 0)
+            {
+                listView.Items.Clear();
+                listView.LargeImageList = imageList;
+                listView.SmallImageList = imageList;
+                foreach (string item in ItemsList)
+                {
+                    listView.Items.Add(item);
+                    listView.Items[listView.Items.Count - 1].ImageIndex = (listView.Items.Count - 1);
+                }
+            }
+
+        }
+
+        /*TODO- TreeView Functions
+         - LoadFoldersList(folderName);
+         - LoadFilesList(folderName);
+         - 
+         */
+
+        /* TODO- RichTextBox Functions
+         - LoadFile(fileName);
+         */
 
     }
 
