@@ -38,3 +38,24 @@ Byte Array Methods :
 Exception Class Methods :
 
 - ExportExceptionData() // Its export important exception data to csv file.
+
+v2.0.0
+Added New Functions.
+
+ListView Functions:
+- LoadFoldersList() // Takes one parameter which is parentDirectory . its loads all the folders in parentDirectory to list view.
+- LoadFoldersListAysnc() // Takes one parameter which is parentDirectory . its loads all the folders in parentDirectory to list view aysnc.
+ - LoadFilesList() // Takes one parameter which is parentDirectory . its loads all the files in parentDirectory to list view.
+ - LoadFoldersListAysnc() // Takes one parameter which is parentDirectory . its loads all the folders in parentDirectory to list view aysnc.
+ - LoadFilesListWithIcons() // Takes one parameter which is parentDirectory . its loads all the files with there icons in parentDirectory to list view.
+ - LoadFilesListWithIconsAysnc() // Takes one parameter which is parentDirectory . its loads all the files with there icons in parentDirectory to list view aysnc.
+ 
+ DataGridViewComboBoxCell Methods : 
+ - UpdateDataSource() // It takes 3 parameters 
+*dataSource // the data source.
+*displayMember // the display member for the DataGridViewComboBoxCell.
+*valueMember // the value member for the DataGridViewComboBoxCell 
+Important Note : Use this on in DataGridView.RowsAdded Event.
+
+ImageList Methods :
+- FillImageList() // Takes one parameter icons List List<Icon>. it fills the ImageList.Images Property.
