@@ -592,21 +592,11 @@ namespace ProductivityFunctionsLibrary
                 imageList.Images.Add(icon);
             }
 
-        } 
+        }
 
         #endregion
 
-        /*TODO- ListView Functions 
-      - LoadFoldersListWithIcons(folderName);
-      - LoadFoldersListWithIconsAsync(folderName);
-      - LoadFilesListWithIconsAysnc(folderName);
-      - LoadFilesAndFolders(folderName);
-      - LoadFilesAndFoldersAysnc(folderName);
-      - LoadFilesAndFoldersWithIcons(folderName);
-      - LoadFilesAndFoldersWithIconsAysnc(folderName);
-      - LoadList(list<T>);
-      - LoadList(list<T>,ImageList images);
-      */
+        #region ListView Methods
 
         /// <summary>
         /// Loads all the folders inside parent directory.
@@ -679,7 +669,7 @@ namespace ProductivityFunctionsLibrary
         public static async void LoadFilesListAysnc(this ListView listView, string parentDirectory)
         {
 
-            List<string> ItemsList = await  LoadAllFiles(parentDirectory);
+            List<string> ItemsList = await LoadAllFiles(parentDirectory);
 
             if (ItemsList.Count > 0)
             {
@@ -727,7 +717,7 @@ namespace ProductivityFunctionsLibrary
         public static async void LoadFilesWithIconsAysnc(this ListView listView, string parentDirectory)
         {
 
-            List<string> ItemsList = await  LoadAllFiles(parentDirectory);
+            List<string> ItemsList = await LoadAllFiles(parentDirectory);
             ImageList imageList = new ImageList();
             imageList.FillImageList(await LoadAllFileIconsAysnc(parentDirectory));
 
@@ -745,15 +735,264 @@ namespace ProductivityFunctionsLibrary
 
         }
 
-        /*TODO- TreeView Functions
-         - LoadFoldersList(folderName);
-         - LoadFilesList(folderName);
-         - 
-         */
+        /// <summary>
+        /// Load all files and folders inside of parent Directory.
+        /// </summary>
+        /// <param name="listView">The list view to load files on</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static void LoadFilesAndFolders(this ListView listView, string parentDirectory)
+        {
 
-        /* TODO- RichTextBox Functions
-         - LoadFile(fileName);
-         */
+            List<string> ItemsList = LoadAllFiles_(parentDirectory);
+            ItemsList.AddRange(LoadAllFolders_(parentDirectory));
+
+            if (ItemsList.Count > 0)
+            {
+                listView.Items.Clear();
+                foreach (string item in ItemsList)
+                {
+                    listView.Items.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Load all files and folders inside of parent Directory aysnc.
+        /// </summary>
+        /// <param name="listView">The list view to load files on</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static async void LoadFilesAndFoldersAysnc(this ListView listView, string parentDirectory)
+        {
+
+            List<string> ItemsList = await LoadAllFiles(parentDirectory);
+            ItemsList.AddRange(await LoadAllFolders(parentDirectory));
+
+            if (ItemsList.Count > 0)
+            {
+                listView.Items.Clear();
+                foreach (string item in ItemsList)
+                {
+                    listView.Items.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Load all files and folders inside of parent Directory with thier icons.
+        /// </summary>
+        /// <param name="listView">The list view to load files on</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static void LoadFilesAndFoldersWithIcons(this ListView listView, string parentDirectory)
+        {
+
+            List<string> ItemsList = LoadAllFiles_(parentDirectory);
+            ItemsList.AddRange(LoadAllFolders_(parentDirectory));
+            ImageList imageList = new ImageList();
+            imageList.FillImageList(LoadAllFileIcons(parentDirectory));
+
+            if (ItemsList.Count > 0)
+            {
+                listView.Items.Clear();
+                listView.LargeImageList = imageList;
+                listView.SmallImageList = imageList;
+                foreach (string item in ItemsList)
+                {
+                    listView.Items.Add(item);
+                    listView.Items[listView.Items.Count - 1].ImageIndex = (listView.Items.Count - 1);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Load all files and folders inside of parent Directory with thier icons aysnc.
+        /// </summary>
+        /// <param name="listView">The list view to load files on</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static async void LoadFilesAndFoldersWithIconsAysnc(this ListView listView, string parentDirectory)
+        {
+
+            List<string> ItemsList = await LoadAllFiles(parentDirectory);
+            ItemsList.AddRange(await LoadAllFolders(parentDirectory));
+            ImageList imageList = new ImageList();
+            imageList.FillImageList(await LoadAllFileIconsAysnc(parentDirectory));
+
+            if (ItemsList.Count > 0)
+            {
+                listView.Items.Clear();
+                listView.LargeImageList = imageList;
+                listView.SmallImageList = imageList;
+                foreach (string item in ItemsList)
+                {
+                    listView.Items.Add(item);
+                    listView.Items[listView.Items.Count - 1].ImageIndex = (listView.Items.Count - 1);
+                }
+            }
+
+        }
+
+        /*TODO- ListView Functions 
+   - LoadList(list<T>);
+   - LoadList(list<T>,ImageList images);
+   */
+
+        #endregion
+
+        #region TreeView Methods
+
+        /// <summary>
+        /// Loads all the folders inside parent directory.
+        /// </summary>
+        /// <param name="treeView">The tree view to load folders on.</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static void LoadFoldersList(this TreeView treeView, string parentDirectory)
+        {
+
+            List<string> ItemsList = LoadAllFolders_(parentDirectory);
+
+            if (ItemsList.Count > 0)
+            {
+                treeView.Nodes.Clear();
+                foreach (string item in ItemsList)
+                {
+                    treeView.Nodes.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Loads all the folders inside parent directory aysnc.
+        /// </summary>
+        /// <param name="treeView">The tree view to load folders on.</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static async void LoadFoldersListAysnc(this TreeView treeView, string parentDirectory)
+        {
+
+            List<string> ItemsList = await  LoadAllFolders(parentDirectory);
+
+            if (ItemsList.Count > 0)
+            {
+                treeView.Nodes.Clear();
+                foreach (string item in ItemsList)
+                {
+                    treeView.Nodes.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Loads all the files inside parent directory.
+        /// </summary>
+        /// <param name="treeView">The tree view to load files on.</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static void LoadFilesList(this TreeView treeView, string parentDirectory)
+        {
+
+            List<string> ItemsList = LoadAllFiles_(parentDirectory);
+
+            if (ItemsList.Count > 0)
+            {
+                treeView.Nodes.Clear();
+                foreach (string item in ItemsList)
+                {
+                    treeView.Nodes.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Loads all the files inside parent directory aysnc.
+        /// </summary>
+        /// <param name="treeView">The tree view to load files on.</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static async void LoadFilesListAysnc(this TreeView treeView, string parentDirectory)
+        {
+
+            List<string> ItemsList = await LoadAllFiles(parentDirectory);
+
+            if (ItemsList.Count > 0)
+            {
+                treeView.Nodes.Clear();
+                foreach (string item in ItemsList)
+                {
+                    treeView.Nodes.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Loads all the files and folders inside parent directory.
+        /// </summary>
+        /// <param name="treeView">The tree view to load files and folders on.</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static void LoadFilesAndFolders(this TreeView treeView, string parentDirectory)
+        {
+
+            List<string> ItemsList = LoadAllFiles_(parentDirectory);
+            ItemsList.AddRange(LoadAllFolders_(parentDirectory));
+
+            if (ItemsList.Count > 0)
+            {
+                treeView.Nodes.Clear();
+                foreach (string item in ItemsList)
+                {
+                    treeView.Nodes.Add(item);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Loads all the files and folders inside parent directory aysnc.
+        /// </summary>
+        /// <param name="treeView">The tree view to load files and folders on.</param>
+        /// <param name="parentDirectory">Full path of the parent directory.</param>
+        public static async void LoadFilesAndFoldersAysnc(this TreeView treeView, string parentDirectory)
+        {
+
+            List<string> ItemsList = await LoadAllFiles(parentDirectory);
+            ItemsList.AddRange(await LoadAllFolders(parentDirectory));
+
+            if (ItemsList.Count > 0)
+            {
+                treeView.Nodes.Clear();
+                foreach (string item in ItemsList)
+                {
+                    treeView.Nodes.Add(item);
+                }
+            }
+
+        }
+
+        #endregion
+
+        #region RichTextBox Methods
+
+        /// <summary>
+        /// Load Image to picture box from file that user choises.
+        /// </summary>
+        /// <param name="richTextBox">The rich text box to load file on.</param>
+        /// <param name="filter">The filter to be used to get type of document. example ("Doc Files|*.doc|Txt Files|*.txt")</param>
+        /// <param name="fileDialogTitle">The title for the dialog appears for the user.</param>
+        public static void LoadFile(this RichTextBox richTextBox,string filter,string fileDialogTitle)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = filter;
+            openFileDialog.Title = fileDialogTitle;
+            openFileDialog.FileName = "";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                richTextBox.Text = File.ReadAllText(openFileDialog.FileName);
+            }
+        }
+
+        #endregion
 
     }
 
