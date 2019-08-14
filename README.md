@@ -1,6 +1,7 @@
 # ProductivityFunctions
 ![ProductivityLogo](https://github.com/BekoSan/ProductivityFunctions/blob/master/ProductivityLogo.png)
-This is an extension  functions library for  PictureBox , DataGridView ,Form and Byte Array and Exceiption Class 
+
+This is a list of extension methods that make it easy to work with comon WinForms Controls and classes.
 
 # Release Notes
 v1.0.0
@@ -62,4 +63,4 @@ ImageList Methods :
 
 ## GetLatest Version From nuget.org
 
-![Productivity Functions Nuget](https://www.nuget.org/packages/BekoSan.ProductivityFunctions/)
+[Productivity Functions Nuget](https://www.nuget.org/packages/BekoSan.ProductivityFunctions/)
