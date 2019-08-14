@@ -60,6 +60,6 @@ Important Note : Use this on in DataGridView.RowsAdded Event.
 ImageList Methods :
 - FillImageList() // Takes one parameter icons List List<Icon>. it fills the ImageList.Images Property.
 
-##GetLatest Version From nuget.org
+## GetLatest Version From nuget.org
 
 ![Productivity Functions Nuget](https://www.nuget.org/packages/BekoSan.ProductivityFunctions/)
