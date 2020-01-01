@@ -975,7 +975,7 @@ namespace ProductivityFunctionsLibrary
         #region RichTextBox Methods
 
         /// <summary>
-        /// Load Image to picture box from file that user choises.
+        /// Load Text to rich text box from file that user choises.
         /// </summary>
         /// <param name="richTextBox">The rich text box to load file on.</param>
         /// <param name="filter">The filter to be used to get type of document. example ("Doc Files|*.doc|Txt Files|*.txt")</param>
